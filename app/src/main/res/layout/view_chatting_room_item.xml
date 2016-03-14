@@ -2,7 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/view_chatting_room_item_layout"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/bikeeWhite"
+    android:paddingBottom="21dp"
+    android:paddingEnd="17dp"
+    android:paddingLeft="17dp"
+    android:paddingRight="17dp"
+    android:paddingStart="17dp"
+    android:paddingTop="17dp">
 
     <!-- TODO : 크기 및 위치 조정(xml레벨에서 조정해도 무관합니다.) -->
     <RelativeLayout
@@ -22,7 +29,9 @@
             android:id="@+id/view_chatting_room_item_reservation_state_image_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true" />
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="2dp"
+            android:layout_marginStart="2dp" />
     </RelativeLayout>
 
     <!-- 유저 이름 텍스트 뷰 -->
@@ -30,39 +39,60 @@
         android:id="@+id/view_chatting_room_item_user_name_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignTop="@id/view_chatting_room_item_reservation_state_user_image_layout"
+        android:layout_marginLeft="13dp"
+        android:layout_marginStart="13dp"
+        android:layout_toEndOf="@id/view_chatting_room_item_reservation_state_user_image_layout"
+        android:layout_toRightOf="@id/view_chatting_room_item_reservation_state_user_image_layout"
         android:textColor="@color/bikeeBlack"
         android:textSize="13sp" />
 
-    <!-- 마지막 메시지 시간 텍스트 뷰 -->
+    <!-- 마지막 대화 시간 텍스트 뷰 -->
     <TextView
         android:id="@+id/view_chatting_room_item_last_conversation_time_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/bikeeGray"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/view_chatting_room_item_reservation_state_user_image_layout"
+        android:textColor="@color/bikeeLightGray"
         android:textSize="10sp" />
 
-    <!-- 유저 이름 텍스트 뷰 -->
+    <!-- 자전거 이름 텍스트 뷰 -->
     <TextView
         android:id="@+id/view_chatting_room_item_bicycle_name_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/view_chatting_room_item_user_name_text_view"
+        android:layout_alignStart="@id/view_chatting_room_item_user_name_text_view"
+        android:layout_below="@id/view_chatting_room_item_user_name_text_view"
+        android:layout_marginTop="16dp"
         android:textColor="@color/bikeeBlack"
         android:textSize="13sp" />
 
-    <!-- 마지막 메시지 내용 텍스트 뷰 -->
+    <!-- 마지막 대화 내용 텍스트 뷰 -->
     <TextView
         android:id="@+id/view_chatting_room_item_last_conversation_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/view_chatting_room_item_user_name_text_view"
+        android:layout_alignStart="@id/view_chatting_room_item_user_name_text_view"
+        android:layout_below="@id/view_chatting_room_item_bicycle_name_text_view"
+        android:layout_marginTop="17dp"
         android:textColor="@color/bikeeGray"
         android:textSize="12sp" />
 
-    <!-- 확인하지 않은 메시지의 갯수 택스트 뷰 -->
+    <!-- 확인하지 않은 대화의 갯수 택스트 뷰 -->
     <TextView
         android:id="@+id/view_chatting_room_item_num_of_stacked_conversation_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/view_chatting_room_item_last_conversation_time_text_view"
+        android:layout_marginTop="40dp"
         android:background="@drawable/message_num"
+        android:gravity="center"
         android:textColor="@color/bikeeWhite"
         android:textSize="13sp" />
 </RelativeLayout>

@@ -84,7 +84,7 @@ public class NetworkManager {
         @Override
         public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             String date = json.getAsString();
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", java.util.Locale.getDefault());
             try {
                 return format.parse(date.replaceAll("Z$", "+0000"));
             } catch (Exception e) {

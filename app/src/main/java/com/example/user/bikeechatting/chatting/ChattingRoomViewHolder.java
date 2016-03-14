@@ -9,6 +9,8 @@ import com.example.user.bikeechatting.R;
 import com.example.user.bikeechatting.etc.MyApplication;
 import com.example.user.bikeechatting.utils.ImageUtil;
 
+import java.text.SimpleDateFormat;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -40,13 +42,42 @@ public class ChattingRoomViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setView(ChattingRoomItem item) {
+        // userImage
         ImageUtil.setCircleImageFromURL(MyApplication.getmContext(), item.getUserImage(), R.drawable.noneimage, 0, userImage);
-        // item의 reservationState에 따라 icon_step1 ~ 4 결정(추후에 적용하겠습니다.)
+
+        // reservationState
+        switch (item.getReservationState()) {
+            case "RR":
+                reservationState.setImageResource(R.drawable.icon_step1);
+                break;
+            case "RS":
+                reservationState.setImageResource(R.drawable.icon_step2);
+                break;
+            case "RC":
+                reservationState.setImageResource(R.drawable.icon_step3);
+                break;
+        }
+
+        // userName
         userName.setText(item.getUserName());
-        // TODO : item의 lastConversationTime을 가이드에 따른 형식으로 변환해 lastConversationTime에 setText 해주시면 됩니다.
+
+        // lastConversationTime
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM.dd HH:mm", java.util.Locale.getDefault());
+        lastConversationTime.setText(simpleDateFormat.format(item.getLastConversationTime()));
+
+        // bicycleName
         bicycleName.setText(item.getBicycleName());
+
+        // lastConversation
         lastConversation.setText(item.getLastConversation());
-        // TODO : item의 numOfStackedConversation가 없을 경우에 numOfStackedConversation에 View.INVISIBLE 처리가 필요합니다.
+
+        // numOfStackedConversation
+        if (item.getNumOfStackedConversation() == 0)
+            numOfStackedConversation.setVisibility(View.GONE);
+        else if (item.getNumOfStackedConversation() > 0) {
+            numOfStackedConversation.setVisibility(View.VISIBLE);
+            numOfStackedConversation.setText("" + item.getNumOfStackedConversation());
+        }
     }
 
     public void setOnChattingRoomClickListener(OnChattingRoomClickListener onChattingRoomClickListener) {

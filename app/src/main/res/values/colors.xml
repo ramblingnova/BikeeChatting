@@ -10,4 +10,5 @@
     <color name="bikeeLightGray">#BDBDBD</color>
     <color name="bikeeBlue">#1993f7</color>
     <color name="bikeeRed">#FF1F1F</color>
+    <color name="bikeeConversationBackground">#D7ECFF</color>
 </resources>

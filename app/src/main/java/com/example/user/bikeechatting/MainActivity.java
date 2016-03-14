@@ -2,12 +2,14 @@ package com.example.user.bikeechatting;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.example.user.bikeechatting.chatting.ChattingRoomsFragment;
 import com.example.user.bikeechatting.dto.ReceiveObject;
 import com.example.user.bikeechatting.manager.NetworkManager;
 
+import butterknife.ButterKnife;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -21,16 +23,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.activity_main_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setCustomView(R.layout.renter_main_toolbar);
+
+        ButterKnife.bind(this);
+
         // 유정 정보
         // email : cuser1@naver.com, password : 1234
         // email : cuser2@naver.com, password : 1234
         // email : cuser3@naver.com, password : 1234
         // email : cuser4@naver.com, password : 1234
-        // email : cuser5@naver.com, password : 1234
-        // email : cuser6@naver.com, password : 1234
-        // email : cuser7@naver.com, password : 1234
-        // email : cuser8@naver.com, password : 1234
-        // email : cuser9@naver.com, password : 1234
 
         // 로그인
         NetworkManager.getInstance().login(

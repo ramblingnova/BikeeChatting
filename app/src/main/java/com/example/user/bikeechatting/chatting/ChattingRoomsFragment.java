@@ -1,5 +1,6 @@
 package com.example.user.bikeechatting.chatting;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,17 +12,24 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.user.bikeechatting.R;
+import com.example.user.bikeechatting.chatting.room.ConversationActivity;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
  * Created by User on 2016-03-11.
  */
 public class ChattingRoomsFragment extends Fragment implements OnChattingRoomAdapterClickListener, SwipeRefreshLayout.OnRefreshListener {
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private RecyclerView recyclerView;
-    private LinearLayoutManager linearLayoutManager;
+    @Bind(R.id.fragment_chatting_rooms_swipe_refresh_layout)
+    SwipeRefreshLayout swipeRefreshLayout;
+    @Bind(R.id.fragment_chatting_rooms_recycler_view)
+    RecyclerView recyclerView;
     private ChattingRoomAdapter chattingRoomAdapter;
+    private static final String TAG = "CHATTING_ROOMS_FRAGMENT";
 
     public static ChattingRoomsFragment newInstance() {
         return new ChattingRoomsFragment();
@@ -39,17 +47,15 @@ public class ChattingRoomsFragment extends Fragment implements OnChattingRoomAda
 
         ButterKnife.bind(this, view);
 
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.fragment_chatting_rooms_swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.fragment_chatting_rooms_recycler_view);
-
-        linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
 
         chattingRoomAdapter = new ChattingRoomAdapter();
         chattingRoomAdapter.setOnChattingRoomAdapterClickListener(this);
-        // TODO : 방목록을 가져와 adapter에 add해야 합니다.
+        // TODO : 방목록을 가져와 adapter에 add해야 합니다
+        init();
         recyclerView.setAdapter(chattingRoomAdapter);
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -64,16 +70,68 @@ public class ChattingRoomsFragment extends Fragment implements OnChattingRoomAda
             }
         });
 
+        recyclerView.addItemDecoration(
+                new ChattingRoomDecoration(
+                        getResources().getDimensionPixelSize(R.dimen.view_holder_chatting_room_item_space)
+                )
+        );
+
         return view;
     }
 
     @Override
     public void onRefresh() {
-
+        swipeRefreshLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        }, 2000);
     }
 
     @Override
-    public void onChattingRoomAdapterClick(View view, int position) {
+    public void onChattingRoomAdapterClick(View view, ChattingRoomItem item, int position) {
         // TODO : 채팅방을 하나 클릭했을 경우에 대화창으로 이동해야 합니다.
+        Intent intent = new Intent(getActivity(), ConversationActivity.class);
+        intent.putExtra("userName", item.getUserName());
+        intent.putExtra("bicycleName", item.getBicycleName());
+        startActivity(intent);
+    }
+
+    // 임시로 만든 데이터
+    private void init() {
+        for (int i = 0; i < 30; i++) {
+            String reservationState = null;
+            switch (i % 3) {
+                case 0:
+                    reservationState = "RR";
+                    break;
+                case 1:
+                    reservationState = "RS";
+                    break;
+                case 2:
+                    reservationState = "RC";
+                    break;
+            }
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", java.util.Locale.getDefault());
+            Date lastConversationTime = new Date();
+            lastConversationTime.setTime(System.currentTimeMillis());
+            try {
+                lastConversationTime = format.parse(lastConversationTime.toString().replaceAll("Z$", "+0000"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            chattingRoomAdapter.add(
+                    new ChattingRoomItem(
+                            "",
+                            reservationState,
+                            "User Name" + i,
+                            lastConversationTime,
+                            "Bicycle Name" + i,
+                            "Last Conversation" + i,
+                            i
+                    )
+            );
+        }
     }
 }

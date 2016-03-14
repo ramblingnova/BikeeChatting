@@ -39,8 +39,10 @@ public class ChattingRoomAdapter extends RecyclerView.Adapter<ChattingRoomViewHo
             @Override
             public void onChattingRoomClick(View view) {
                 // 채팅방을 하나 클릭했을 경우에 이쪽으로 넘어오고 ChattingRoomsFragment로 넘어갑니다.
+                list.get(position).setNumOfStackedConversation(0);
+                notifyDataSetChanged();
                 if (onChattingRoomAdapterClickListener != null)
-                    onChattingRoomAdapterClickListener.onChattingRoomAdapterClick(view, position);
+                    onChattingRoomAdapterClickListener.onChattingRoomAdapterClick(view, list.get(position), position);
             }
         });
     }

@@ -7,5 +7,5 @@ import android.view.View;
  */
 public interface OnChattingRoomAdapterClickListener {
     // TODO : 수정이 필요할 것 같습니다.
-    void onChattingRoomAdapterClick(View view, int position);
+    void onChattingRoomAdapterClick(View view, ChattingRoomItem item, int position);
 }

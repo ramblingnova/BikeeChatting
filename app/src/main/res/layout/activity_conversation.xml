@@ -1,62 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context="com.example.user.bikeechatting.chatting.room.ConversationActivity">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/activity_conversation_swipe_refresh_layout"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="68dp">
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/activity_conversation_recycler_view"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/activity_conversation_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </android.support.v4.widget.SwipeRefreshLayout>
+            android:layout_height="?attr/actionBarSize"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    </android.support.design.widget.AppBarLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="74dp">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/activity_conversation_bicycle_image_image_view"
-            android:layout_width="76dp"
-            android:layout_height="52dp"
-            android:scaleType="fitXY" />
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/activity_conversation_swipe_refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="68dp"
+            android:background="@color/bikeeConversationBackground">
 
-        <TextView
-            android:id="@+id/activity_conversation_bicycle_name_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/bikeeBlack"
-            android:textSize="13sp" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/activity_conversation_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </android.support.v4.widget.SwipeRefreshLayout>
 
-        <ImageView
-            android:id="@+id/activity_conversation_clock_image_image_view"
-            android:layout_width="11dp"
-            android:layout_height="11dp"
-            android:src="@drawable/icon_time" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="74dp">
 
-        <TextView
-            android:id="@+id/activity_conversation_reservation_period_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/bikeeGray"
-            android:textSize="11sp" />
+            <ImageView
+                android:id="@+id/activity_conversation_bicycle_image_image_view"
+                android:layout_width="76dp"
+                android:layout_height="52dp"
+                android:scaleType="fitXY" />
 
-        <ImageView
-            android:id="@+id/activity_conversation_reservation_state_image_view"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
-            android:scaleType="fitXY" />
+            <TextView
+                android:id="@+id/activity_conversation_bicycle_name_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/bikeeBlack"
+                android:textSize="13sp" />
 
-        <TextView
-            android:id="@+id/activity_conversation_reservation_state_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="11sp" />
+            <ImageView
+                android:id="@+id/activity_conversation_clock_image_image_view"
+                android:layout_width="11dp"
+                android:layout_height="11dp"
+                android:src="@drawable/icon_time" />
+
+            <TextView
+                android:id="@+id/activity_conversation_reservation_period_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/bikeeGray"
+                android:textSize="11sp" />
+
+            <ImageView
+                android:id="@+id/activity_conversation_reservation_state_image_view"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:scaleType="fitXY" />
+
+            <TextView
+                android:id="@+id/activity_conversation_reservation_state_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11sp" />
+        </RelativeLayout>
     </RelativeLayout>
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>
