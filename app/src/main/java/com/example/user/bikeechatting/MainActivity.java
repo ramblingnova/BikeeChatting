@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.user.bikeechatting.chatting.ChattingRoomsFragment;
 import com.example.user.bikeechatting.dto.ReceiveObject;
 import com.example.user.bikeechatting.manager.NetworkManager;
 
@@ -13,12 +14,14 @@ import retrofit.client.Response;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MAIN_ACTIVITY";
+    private ChattingRoomsFragment chattingRoomsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // 유정 정보
         // email : cuser1@naver.com, password : 1234
         // email : cuser2@naver.com, password : 1234
         // email : cuser3@naver.com, password : 1234
@@ -28,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
         // email : cuser7@naver.com, password : 1234
         // email : cuser8@naver.com, password : 1234
         // email : cuser9@naver.com, password : 1234
+
+        // 로그인
         NetworkManager.getInstance().login(
                 "cuser1@naver.com",
                 "1234",
@@ -47,5 +52,10 @@ public class MainActivity extends AppCompatActivity {
                             Log.d(TAG, "onFailure Error : " + error.toString());
                     }
                 });
+
+        // 채팅방 목록 화면 실행
+        chattingRoomsFragment = ChattingRoomsFragment.newInstance();
+        if (savedInstanceState == null)
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment_chatting_rooms_container, chattingRoomsFragment).commit();
     }
 }

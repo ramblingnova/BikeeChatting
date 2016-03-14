@@ -3,4 +3,11 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="bikeeBlack">#212121</color>
+    <color name="bikeeWhite">#ffffff</color>
+    <color name="bikeeGray">#757575</color>
+    <color name="bikeeLightGray">#BDBDBD</color>
+    <color name="bikeeBlue">#1993f7</color>
+    <color name="bikeeRed">#FF1F1F</color>
 </resources>

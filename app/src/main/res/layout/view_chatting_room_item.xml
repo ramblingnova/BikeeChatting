@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/view_chatting_room_item_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <!-- TODO : 크기 및 위치 조정(xml레벨에서 조정해도 무관합니다.) -->
+    <RelativeLayout
+        android:id="@+id/view_chatting_room_item_reservation_state_user_image_layout"
+        android:layout_width="50dp"
+        android:layout_height="50dp">
+
+        <!-- 유저의 사진 이미지 뷰-->
+        <ImageView
+            android:id="@+id/view_chatting_room_item_user_image_image_view"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="fitXY" />
+
+        <!-- 예약 상태 이미지 뷰 -->
+        <ImageView
+            android:id="@+id/view_chatting_room_item_reservation_state_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true" />
+    </RelativeLayout>
+
+    <!-- 유저 이름 텍스트 뷰 -->
+    <TextView
+        android:id="@+id/view_chatting_room_item_user_name_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/bikeeBlack"
+        android:textSize="13sp" />
+
+    <!-- 마지막 메시지 시간 텍스트 뷰 -->
+    <TextView
+        android:id="@+id/view_chatting_room_item_last_conversation_time_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/bikeeGray"
+        android:textSize="10sp" />
+
+    <!-- 유저 이름 텍스트 뷰 -->
+    <TextView
+        android:id="@+id/view_chatting_room_item_bicycle_name_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/bikeeBlack"
+        android:textSize="13sp" />
+
+    <!-- 마지막 메시지 내용 텍스트 뷰 -->
+    <TextView
+        android:id="@+id/view_chatting_room_item_last_conversation_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/bikeeGray"
+        android:textSize="12sp" />
+
+    <!-- 확인하지 않은 메시지의 갯수 택스트 뷰 -->
+    <TextView
+        android:id="@+id/view_chatting_room_item_num_of_stacked_conversation_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/message_num"
+        android:textColor="@color/bikeeWhite"
+        android:textSize="13sp" />
+</RelativeLayout>
