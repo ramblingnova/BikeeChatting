@@ -54,7 +54,6 @@ public class ChattingRoomsFragment extends Fragment implements OnChattingRoomAda
 
         chattingRoomAdapter = new ChattingRoomAdapter();
         chattingRoomAdapter.setOnChattingRoomAdapterClickListener(this);
-        // TODO : 방목록을 가져와 adapter에 add해야 합니다
         init();
         recyclerView.setAdapter(chattingRoomAdapter);
 
@@ -91,7 +90,6 @@ public class ChattingRoomsFragment extends Fragment implements OnChattingRoomAda
 
     @Override
     public void onChattingRoomAdapterClick(View view, ChattingRoomItem item, int position) {
-        // TODO : 채팅방을 하나 클릭했을 경우에 대화창으로 이동해야 합니다.
         Intent intent = new Intent(getActivity(), ConversationActivity.class);
         intent.putExtra("userName", item.getUserName());
         intent.putExtra("bicycleName", item.getBicycleName());

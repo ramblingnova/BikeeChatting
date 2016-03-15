@@ -42,7 +42,6 @@ public class ConversationActivity extends AppCompatActivity implements SwipeRefr
 
         ButterKnife.bind(this);
 
-        // TODO : 유저의 이름을 가져와 userName에 setText를 해야 합니다.
         Intent intent = getIntent();
         userName.setText(intent.getStringExtra("userName"));
 
@@ -52,7 +51,6 @@ public class ConversationActivity extends AppCompatActivity implements SwipeRefr
         recyclerView.setLayoutManager(linearLayoutManager);
 
         conversationAdapter = new ConversationAdapter();
-        // TODO : 방 대화 목록을 가져와 adapter에 add해야 합니다.
         init();
         recyclerView.setAdapter(conversationAdapter);
 

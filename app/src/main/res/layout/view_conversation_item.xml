@@ -4,7 +4,6 @@
     android:layout_height="wrap_content">
 
     <!-- TODO : 유저 이미지에서 marginBottom이 적용되지 않습니다. -->
-
     <ImageView
         android:id="@+id/view_conversation_item_user_image_image_view"
         android:layout_width="36dp"
