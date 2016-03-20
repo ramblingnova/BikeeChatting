@@ -21,12 +21,19 @@ public class ConversationItem {
     Date conversationTime;
     @Getter
     @Setter(AccessLevel.PUBLIC)
-    boolean opponent;
+    int type;
+    @Getter
+    @Setter(AccessLevel.PUBLIC)
+    boolean single;
+    @Getter
+    @Setter(AccessLevel.PUBLIC)
+    int innerType;
 
-    public ConversationItem(String userImage, String conversation, Date conversationTime, boolean opponent) {
+    public ConversationItem(String userImage, String conversation, Date conversationTime, int type) {
         this.userImage = userImage;
         this.conversation = conversation;
         this.conversationTime = conversationTime;
-        this.opponent = opponent;
+        this.type = type;
+        this.single = true;
     }
 }

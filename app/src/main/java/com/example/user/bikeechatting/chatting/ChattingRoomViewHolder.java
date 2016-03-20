@@ -48,13 +48,13 @@ public class ChattingRoomViewHolder extends RecyclerView.ViewHolder {
         // reservationState
         switch (item.getReservationState()) {
             case "RR":
-                reservationState.setImageResource(R.drawable.icon_step1);
+                reservationState.setImageResource(R.drawable.chatting_icon_step1);
                 break;
             case "RS":
-                reservationState.setImageResource(R.drawable.icon_step2);
+                reservationState.setImageResource(R.drawable.chatting_icon_step2);
                 break;
             case "RC":
-                reservationState.setImageResource(R.drawable.icon_step3);
+                reservationState.setImageResource(R.drawable.chatting_icon_step3);
                 break;
         }
 

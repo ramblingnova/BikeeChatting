@@ -49,7 +49,7 @@ public class ChattingRoomsFragment extends Fragment implements OnChattingRoomAda
 
         swipeRefreshLayout.setOnRefreshListener(this);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true);
         recyclerView.setLayoutManager(linearLayoutManager);
 
         chattingRoomAdapter = new ChattingRoomAdapter();
@@ -74,6 +74,8 @@ public class ChattingRoomsFragment extends Fragment implements OnChattingRoomAda
                         getResources().getDimensionPixelSize(R.dimen.view_holder_chatting_room_item_space)
                 )
         );
+
+        recyclerView.smoothScrollToPosition(chattingRoomAdapter.getItemCount() - 1);
 
         return view;
     }
@@ -111,14 +113,8 @@ public class ChattingRoomsFragment extends Fragment implements OnChattingRoomAda
                     reservationState = "RC";
                     break;
             }
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", java.util.Locale.getDefault());
             Date lastConversationTime = new Date();
             lastConversationTime.setTime(System.currentTimeMillis());
-            try {
-                lastConversationTime = format.parse(lastConversationTime.toString().replaceAll("Z$", "+0000"));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
             chattingRoomAdapter.add(
                     new ChattingRoomItem(
                             "",
