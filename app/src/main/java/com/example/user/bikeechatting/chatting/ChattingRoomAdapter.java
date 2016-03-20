@@ -23,7 +23,6 @@ public class ChattingRoomAdapter extends RecyclerView.Adapter<ChattingRoomViewHo
 
     @Override
     public ChattingRoomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // 리스트를 만들때 몇 개 생성합니다.
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_chatting_room_item, parent, false);
 
         ChattingRoomViewHolder chattingRoomViewHolder = new ChattingRoomViewHolder(view);
@@ -33,12 +32,10 @@ public class ChattingRoomAdapter extends RecyclerView.Adapter<ChattingRoomViewHo
 
     @Override
     public void onBindViewHolder(ChattingRoomViewHolder holder, final int position) {
-        // 뷰를 돌려씁니다.
         holder.setView(list.get(position));
         holder.setOnChattingRoomClickListener(new OnChattingRoomClickListener() {
             @Override
             public void onChattingRoomClick(View view) {
-                // 채팅방을 하나 클릭했을 경우에 이쪽으로 넘어오고 ChattingRoomsFragment로 넘어갑니다.
                 list.get(position).setNumOfStackedConversation(0);
                 notifyDataSetChanged();
                 if (onChattingRoomAdapterClickListener != null)

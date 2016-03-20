@@ -42,10 +42,8 @@ public class ChattingRoomViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setView(ChattingRoomItem item) {
-        // userImage
         ImageUtil.setCircleImageFromURL(MyApplication.getmContext(), item.getUserImage(), R.drawable.noneimage, 0, userImage);
 
-        // reservationState
         switch (item.getReservationState()) {
             case "RR":
                 reservationState.setImageResource(R.drawable.chatting_icon_step1);
@@ -58,20 +56,15 @@ public class ChattingRoomViewHolder extends RecyclerView.ViewHolder {
                 break;
         }
 
-        // userName
         userName.setText(item.getUserName());
 
-        // lastConversationTime
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM.dd HH:mm", java.util.Locale.getDefault());
         lastConversationTime.setText(simpleDateFormat.format(item.getLastConversationTime()));
 
-        // bicycleName
         bicycleName.setText(item.getBicycleName());
 
-        // lastConversation
         lastConversation.setText(item.getLastConversation());
 
-        // numOfStackedConversation
         if (item.getNumOfStackedConversation() == 0)
             numOfStackedConversation.setVisibility(View.GONE);
         else if (item.getNumOfStackedConversation() > 0) {

@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import com.example.user.bikeechatting.R;
 import com.example.user.bikeechatting.chatting.room.ConversationActivity;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import butterknife.Bind;
