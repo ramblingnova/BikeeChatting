@@ -42,7 +42,13 @@ public class ChattingRoomViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setView(ChattingRoomItem item) {
-        ImageUtil.setCircleImageFromURL(MyApplication.getmContext(), item.getUserImage(), R.drawable.noneimage, 0, userImage);
+        ImageUtil.setCircleImageFromURL(
+                MyApplication.getmContext(),
+                item.getUserImage(),
+                R.drawable.noneimage,
+                0,
+                userImage
+        );
 
         switch (item.getReservationState()) {
             case "RR":
@@ -79,7 +85,6 @@ public class ChattingRoomViewHolder extends RecyclerView.ViewHolder {
 
     @OnClick(R.id.view_chatting_room_item_layout)
     void onClick(View view) {
-        // 채팅 방을 하나 클릭할 경우 ChattingRoomAdapter로 넘어갑니다.
         if (onChattingRoomClickListener != null)
             onChattingRoomClickListener.onChattingRoomClick(view);
     }

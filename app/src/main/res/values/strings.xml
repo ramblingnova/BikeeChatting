@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">BikeeChatting</string>
+
+    <string name="GCM_SenderId">1067729957964</string>
 </resources>

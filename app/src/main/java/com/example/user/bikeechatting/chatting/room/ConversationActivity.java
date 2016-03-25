@@ -1,28 +1,50 @@
 package com.example.user.bikeechatting.chatting.room;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.user.bikeechatting.R;
 import com.example.user.bikeechatting.utils.ImageUtil;
+import com.sendbird.android.MessageListQuery;
+import com.sendbird.android.SendBird;
+import com.sendbird.android.SendBirdEventHandler;
+import com.sendbird.android.SendBirdNotificationHandler;
+import com.sendbird.android.model.BroadcastMessage;
+import com.sendbird.android.model.Channel;
+import com.sendbird.android.model.FileLink;
+import com.sendbird.android.model.Mention;
+import com.sendbird.android.model.Message;
+import com.sendbird.android.model.MessageModel;
+import com.sendbird.android.model.MessagingChannel;
+import com.sendbird.android.model.ReadStatus;
+import com.sendbird.android.model.SystemMessage;
+import com.sendbird.android.model.TypeStatus;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ConversationActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class ConversationActivity extends AppCompatActivity {
     @Bind(R.id.conversation_toolbar_user_name_text_view)
     TextView userName;
     @Bind(R.id.activity_conversation_bicycle_image_image_view)
@@ -35,14 +57,43 @@ public class ConversationActivity extends AppCompatActivity implements SwipeRefr
     ImageView reservationStateImage;
     @Bind(R.id.activity_conversation_reservation_state_text_view)
     TextView reservationState;
-    @Bind(R.id.activity_conversation_swipe_refresh_layout)
-    SwipeRefreshLayout swipeRefreshLayout;
     @Bind(R.id.activity_conversation_recycler_view)
     RecyclerView recyclerView;
+    @Bind(R.id.activity_conversation_writing_bar_layout)
+    RelativeLayout writingBar;
+    @Bind(R.id.activity_conversation_writing_bar_message_edit_text)
+    EditText messageEditText;
+    @Bind(R.id.activity_conversation_writing_bar_send_message_button)
+    Button sendMessage;
     private ConversationAdapter conversationAdapter;
     private LinearLayoutManager linearLayoutManager;
     private boolean lastVisibleItem;
     private SoftKeyboardDetectorView softKeyboardDetector;
+    private static final String TAG = "CONVERSATION_ACTIVITY";
+    private String messageChannelURL;
+    private InputMethodManager imm;
+    private TextWatcher tw = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            sendMessage.setEnabled(s.length() > 0);
+
+            if (s.length() > 0) {
+                SendBird.typeStart();
+            } else {
+                SendBird.typeEnd();
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +111,130 @@ public class ConversationActivity extends AppCompatActivity implements SwipeRefr
 
         Intent intent = getIntent();
         userName.setText(intent.getStringExtra("userName"));
+        String appId = intent.getStringExtra("APP_ID");
+        String userId = intent.getStringExtra("USER_ID");
+        String myName = intent.getStringExtra("USER_NAME");
+        String gcmRegToken = "f7x_1qavNuM:APA91bGB8RVUTMtxFbTehOYO-gr5JFUORJQZDLtzAsXoDD_o2ZBqHn_PhqAfzpJwSbY6SF6iY7_mfK4nrEERZsZbq5HuddaVqKPBA6OKBdjJrSTxjEJEyfIzLcJeNpPcgoo0f66cXwxY";
+        messageChannelURL = intent.getStringExtra("messageChannelUrl");
 
-        swipeRefreshLayout.setOnRefreshListener(this);
+        messageEditText.addTextChangedListener(tw);
+
+        SendBird.init(this, appId);
+        SendBird.login(SendBird.LoginOption.build(userId).setUserName(myName).setGCMRegToken(gcmRegToken));
+
+        SendBird.registerNotificationHandler(new SendBirdNotificationHandler() {
+            @Override
+            public void onMessagingChannelUpdated(MessagingChannel messagingChannel) {
+
+            }
+
+            @Override
+            public void onMentionUpdated(Mention mention) {
+
+            }
+        });
+
+        SendBird.setEventHandler(new SendBirdEventHandler() {
+            @Override
+            public void onConnect(Channel channel) {
+
+            }
+
+            @Override
+            public void onError(int i) {
+
+            }
+
+            @Override
+            public void onChannelLeft(Channel channel) {
+
+            }
+
+            @Override
+            public void onMessageReceived(Message message) {
+
+            }
+
+            @Override
+            public void onMutedMessageReceived(Message message) {
+
+            }
+
+            @Override
+            public void onSystemMessageReceived(SystemMessage systemMessage) {
+
+            }
+
+            @Override
+            public void onBroadcastMessageReceived(BroadcastMessage broadcastMessage) {
+
+            }
+
+            @Override
+            public void onFileReceived(FileLink fileLink) {
+
+            }
+
+            @Override
+            public void onMutedFileReceived(FileLink fileLink) {
+
+            }
+
+            @Override
+            public void onReadReceived(ReadStatus readStatus) {
+
+            }
+
+            @Override
+            public void onTypeStartReceived(TypeStatus typeStatus) {
+
+            }
+
+            @Override
+            public void onTypeEndReceived(TypeStatus typeStatus) {
+
+            }
+
+            @Override
+            public void onAllDataReceived(SendBird.SendBirdDataType sendBirdDataType, int i) {
+
+            }
+
+            @Override
+            public void onMessageDelivery(boolean b, String s, String s1, String s2) {
+
+            }
+
+            @Override
+            public void onMessagingStarted(MessagingChannel messagingChannel) {
+
+            }
+
+            @Override
+            public void onMessagingUpdated(MessagingChannel messagingChannel) {
+
+            }
+
+            @Override
+            public void onMessagingEnded(MessagingChannel messagingChannel) {
+
+            }
+
+            @Override
+            public void onAllMessagingEnded() {
+
+            }
+
+            @Override
+            public void onMessagingHidden(MessagingChannel messagingChannel) {
+
+            }
+
+            @Override
+            public void onAllMessagingHidden() {
+
+            }
+        });
 
         linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -76,7 +249,7 @@ public class ConversationActivity extends AppCompatActivity implements SwipeRefr
                 )
         );
 
-        recyclerView.smoothScrollToPosition(conversationAdapter.getItemCount() - 1);
+//        recyclerView.smoothScrollToPosition(conversationAdapter.getItemCount() - 1);
         lastVisibleItem = true;
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -98,21 +271,25 @@ public class ConversationActivity extends AppCompatActivity implements SwipeRefr
                     recyclerView.scrollToPosition(conversationAdapter.getItemCount() - 1);
             }
         });
+
+        imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 
     @Override
-    public void onRefresh() {
-        swipeRefreshLayout.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        }, 2000);
+    protected void onResume() {
+        super.onResume();
+        SendBird.markAsRead();
     }
 
     @OnClick(R.id.conversation_toolbar_back_button_layout)
     void back(View view) {
         super.onBackPressed();
+    }
+
+    @OnClick(R.id.activity_conversation_writing_bar_send_message_button)
+    void sendMessage(View view) {
+        SendBird.send(messageEditText.getText().toString());
+        messageEditText.setText("");
     }
 
     private void init() {
@@ -132,29 +309,57 @@ public class ConversationActivity extends AppCompatActivity implements SwipeRefr
         else
             reservationState.setTextColor(getResources().getColor(R.color.bikeeBlue, null));
 
-        for (int i = 0; i < 30; i++) {
-            Date conversationTime = new Date();
-            conversationTime.setTime(System.currentTimeMillis());
-            conversationAdapter.add(
-                    new ConversationItem(
-                            "",
-                            "conversation" + i,
-                            conversationTime,
-                            ((i % 12) / 4) + 1
-                    )
-            );
-        }
-        for (int i = 0; i < 10; i++) {
-            Date conversationTime = new Date();
-            conversationTime.setTime(System.currentTimeMillis());
-            conversationAdapter.add(
-                    new ConversationItem(
-                            "",
-                            "conversation",
-                            conversationTime,
-                            (i % 2) + 1
-                    )
-            );
-        }
+
+        SendBird.queryMessageList(messageChannelURL).load(Long.MAX_VALUE, 30, 10, new MessageListQuery.MessageListQueryResult() {
+            @Override
+            public void onResult(List<MessageModel> messageModels) {
+                for (MessageModel model : messageModels) {
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM.dd HH:mm", java.util.Locale.getDefault());
+                    conversationAdapter.add(
+                            new ConversationItem(
+                                    ((Message) model).getSenderImageUrl(),
+                                    ((Message) model).getMessage(),
+                                    new Date(((Message) model).getTimestamp()),
+                                    ((Message) model).getSenderId().equals(SendBird.getUserId()) ? ConversationAdapter.SEND : ConversationAdapter.RECEIVE
+                            )
+                    );
+                }
+                conversationAdapter.notifyDataSetChanged();
+
+                SendBird.markAsRead(messageChannelURL);
+                SendBird.join(messageChannelURL);
+                SendBird.connect(conversationAdapter.getMaxMessageTimestamp());
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
+
+//        for (int i = 0; i < 30; i++) {
+//            Date conversationTime = new Date();
+//            conversationTime.setTime(System.currentTimeMillis());
+//            conversationAdapter.add(
+//                    new ConversationItem(
+//                            "",
+//                            "conversation" + i,
+//                            conversationTime,
+//                            ((i % 12) / 4) + 1
+//                    )
+//            );
+//        }
+//        for (int i = 0; i < 10; i++) {
+//            Date conversationTime = new Date();
+//            conversationTime.setTime(System.currentTimeMillis());
+//            conversationAdapter.add(
+//                    new ConversationItem(
+//                            "",
+//                            "conversation",
+//                            conversationTime,
+//                            (i % 2) + 1
+//                    )
+//            );
+//        }
     }
 }
