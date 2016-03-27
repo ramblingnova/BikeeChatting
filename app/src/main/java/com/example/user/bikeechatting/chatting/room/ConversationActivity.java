@@ -1,6 +1,5 @@
 package com.example.user.bikeechatting.chatting.room;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
@@ -10,8 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -71,7 +70,6 @@ public class ConversationActivity extends AppCompatActivity {
     private SoftKeyboardDetectorView softKeyboardDetector;
     private static final String TAG = "CONVERSATION_ACTIVITY";
     private String messageChannelURL;
-    private InputMethodManager imm;
     private TextWatcher tw = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -152,7 +150,16 @@ public class ConversationActivity extends AppCompatActivity {
 
             @Override
             public void onMessageReceived(Message message) {
-
+                conversationAdapter.add(
+                        new ConversationItem(
+                                message.getSenderImageUrl(),
+                                message.getMessage(),
+                                new Date(message.getTimestamp()),
+                                message.getSenderId().equals(SendBird.getUserId()) ? ConversationAdapter.SEND : ConversationAdapter.RECEIVE
+                        )
+                );
+                conversationAdapter.notifyDataSetChanged();
+                recyclerView.scrollToPosition(conversationAdapter.getItemCount() - 1);
             }
 
             @Override
@@ -206,8 +213,36 @@ public class ConversationActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onMessagingStarted(MessagingChannel messagingChannel) {
+            public void onMessagingStarted(final MessagingChannel messagingChannel) {
+                SendBird.queryMessageList(messagingChannel.getUrl()).load(
+                        Long.MAX_VALUE,
+                        30,
+                        10,
+                        new MessageListQuery.MessageListQueryResult() {
+                    @Override
+                    public void onResult(List<MessageModel> messageModels) {
+                        for (MessageModel model : messageModels)
+                            conversationAdapter.add(
+                                    new ConversationItem(
+                                            ((Message) model).getSenderImageUrl(),
+                                            ((Message) model).getMessage(),
+                                            new Date(((Message) model).getTimestamp()),
+                                            ((Message) model).getSenderId().equals(SendBird.getUserId()) ? ConversationAdapter.SEND : ConversationAdapter.RECEIVE
+                                    )
+                            );
+                        conversationAdapter.notifyDataSetChanged();
+                        recyclerView.scrollToPosition(conversationAdapter.getItemCount() - 1);
 
+                        SendBird.markAsRead(messagingChannel.getUrl());
+                        SendBird.join(messagingChannel.getUrl());
+                        SendBird.connect(conversationAdapter.getMaxMessageTimestamp());
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+
+                    }
+                });
             }
 
             @Override
@@ -249,7 +284,6 @@ public class ConversationActivity extends AppCompatActivity {
                 )
         );
 
-//        recyclerView.smoothScrollToPosition(conversationAdapter.getItemCount() - 1);
         lastVisibleItem = true;
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -259,6 +293,75 @@ public class ConversationActivity extends AppCompatActivity {
                 int lastVisibleItemPosition = linearLayoutManager.findLastCompletelyVisibleItemPosition();
 
                 lastVisibleItem = ((totalItemCount - 1) == lastVisibleItemPosition);
+            }
+
+            @Override
+            public void onScrollStateChanged(final RecyclerView recyclerView, int scrollState) {
+                super.onScrollStateChanged(recyclerView, scrollState);
+
+                if (scrollState == RecyclerView.SCROLL_STATE_IDLE) {
+                    if (linearLayoutManager.findFirstVisibleItemPosition() == 0
+                            && recyclerView.getChildCount() > 0) {
+                        SendBird.queryMessageList(SendBird.getChannelUrl()).prev(
+                                conversationAdapter.getMinMessageTimestamp(),
+                                30,
+                                new MessageListQuery.MessageListQueryResult() {
+                            @Override
+                            public void onResult(List<MessageModel> messageModels) {
+                                if (messageModels.size() <= 0) {
+                                    return;
+                                }
+
+                                int completeVisiblePosition = linearLayoutManager.findLastCompletelyVisibleItemPosition();
+                                for (MessageModel model : messageModels)
+                                    conversationAdapter.add(
+                                            new ConversationItem(
+                                                    ((Message) model).getSenderImageUrl(),
+                                                    ((Message) model).getMessage(),
+                                                    new Date(((Message) model).getTimestamp()),
+                                                    ((Message) model).getSenderId().equals(SendBird.getUserId()) ? ConversationAdapter.SEND : ConversationAdapter.RECEIVE
+                                            )
+                                    );
+                                conversationAdapter.notifyDataSetChanged();
+                                recyclerView.scrollToPosition(messageModels.size() - 1 + completeVisiblePosition + 1);
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+
+                            }
+                        });
+                    }
+                } else if (linearLayoutManager.findFirstVisibleItemPosition() == conversationAdapter.getItemCount() - 1
+                        && recyclerView.getChildCount() > 0) {
+                    SendBird.queryMessageList(SendBird.getChannelUrl()).next(
+                            conversationAdapter.getMaxMessageTimestamp(),
+                            30,
+                            new MessageListQuery.MessageListQueryResult() {
+                        @Override
+                        public void onResult(List<MessageModel> messageModels) {
+                            if (messageModels.size() <= 0) {
+                                return;
+                            }
+
+                            for (MessageModel model : messageModels)
+                                conversationAdapter.add(
+                                        new ConversationItem(
+                                                ((Message) model).getSenderImageUrl(),
+                                                ((Message) model).getMessage(),
+                                                new Date(((Message) model).getTimestamp()),
+                                                ((Message) model).getSenderId().equals(SendBird.getUserId()) ? ConversationAdapter.SEND : ConversationAdapter.RECEIVE
+                                        )
+                                );
+                            conversationAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+
+                        }
+                    });
+                }
             }
         });
 
@@ -271,14 +374,24 @@ public class ConversationActivity extends AppCompatActivity {
                     recyclerView.scrollToPosition(conversationAdapter.getItemCount() - 1);
             }
         });
-
-        imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         SendBird.markAsRead();
+
+        conversationAdapter.clear();
+        conversationAdapter.notifyDataSetChanged();
+
+        SendBird.joinMessaging(messageChannelURL);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        SendBird.disconnect();
     }
 
     @OnClick(R.id.conversation_toolbar_back_button_layout)
@@ -290,6 +403,7 @@ public class ConversationActivity extends AppCompatActivity {
     void sendMessage(View view) {
         SendBird.send(messageEditText.getText().toString());
         messageEditText.setText("");
+        sendMessage.setEnabled(false);
     }
 
     private void init() {
@@ -308,34 +422,6 @@ public class ConversationActivity extends AppCompatActivity {
             reservationState.setTextColor(getResources().getColor(R.color.bikeeBlue));
         else
             reservationState.setTextColor(getResources().getColor(R.color.bikeeBlue, null));
-
-
-        SendBird.queryMessageList(messageChannelURL).load(Long.MAX_VALUE, 30, 10, new MessageListQuery.MessageListQueryResult() {
-            @Override
-            public void onResult(List<MessageModel> messageModels) {
-                for (MessageModel model : messageModels) {
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM.dd HH:mm", java.util.Locale.getDefault());
-                    conversationAdapter.add(
-                            new ConversationItem(
-                                    ((Message) model).getSenderImageUrl(),
-                                    ((Message) model).getMessage(),
-                                    new Date(((Message) model).getTimestamp()),
-                                    ((Message) model).getSenderId().equals(SendBird.getUserId()) ? ConversationAdapter.SEND : ConversationAdapter.RECEIVE
-                            )
-                    );
-                }
-                conversationAdapter.notifyDataSetChanged();
-
-                SendBird.markAsRead(messageChannelURL);
-                SendBird.join(messageChannelURL);
-                SendBird.connect(conversationAdapter.getMaxMessageTimestamp());
-            }
-
-            @Override
-            public void onError(Exception e) {
-
-            }
-        });
 
 //        for (int i = 0; i < 30; i++) {
 //            Date conversationTime = new Date();
