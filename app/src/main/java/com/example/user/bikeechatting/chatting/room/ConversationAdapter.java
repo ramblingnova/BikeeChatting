@@ -133,7 +133,6 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationViewHo
                 );
 
                 if (discrete && (prevType != DATE))
-                    // TODO : pervPosition + 1이 맞는 지 확인해야 한다.
                     mItemList.add(prevPosition + 1, new ConversationItem(null, prevConversationTime, DATE));
                 else if (item.getMessageType() == prevType) {
                     inspector = new HourInspector()

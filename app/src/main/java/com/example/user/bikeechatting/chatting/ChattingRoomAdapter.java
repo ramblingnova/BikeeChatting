@@ -37,8 +37,6 @@ public class ChattingRoomAdapter extends RecyclerView.Adapter<ChattingRoomViewHo
         holder.setOnChattingRoomClickListener(new OnChattingRoomClickListener() {
             @Override
             public void onChattingRoomClick(View view) {
-                // TODO : erase numOfStackedConversation
-//                list.get(position).setNumOfStackedConversation(0);
                 notifyDataSetChanged();
                 if (onChattingRoomAdapterClickListener != null)
                     onChattingRoomAdapterClickListener.onChattingRoomAdapterClick(view, list.get(position), position);
@@ -61,7 +59,6 @@ public class ChattingRoomAdapter extends RecyclerView.Adapter<ChattingRoomViewHo
     }
 
     public void replace(MessagingChannel messagingChannel) {
-        // TODO : newItem residue field
         ChattingRoomItem newItem = null;
         for(ChattingRoomItem item : list) {
             if(item.getMessagingChannel().getId() == messagingChannel.getId()) {

@@ -6,12 +6,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.user.bikeechatting.BuildConfig;
 import com.example.user.bikeechatting.R;
 import com.example.user.bikeechatting.chatting.room.ConversationActivity;
 import com.sendbird.android.MessagingChannelListQuery;

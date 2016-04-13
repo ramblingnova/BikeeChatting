@@ -107,7 +107,6 @@ public class ConversationActivity extends AppCompatActivity {
         SendBird.registerNotificationHandler(new SendBirdNotificationHandler() {
             @Override
             public void onMessagingChannelUpdated(MessagingChannel messagingChannel) {
-                // TODO : update read status
                 if ((mMessagingChannel != null)
                         && (mMessagingChannel.getId() == messagingChannel.getId()))
                     updateReadStatus(messagingChannel);
@@ -177,7 +176,6 @@ public class ConversationActivity extends AppCompatActivity {
 
             @Override
             public void onReadReceived(ReadStatus readStatus) {
-                // TODO : set read status
                 conversationAdapter.setReadStatus(readStatus.getUserId(), readStatus.getTimestamp());
             }
 
@@ -203,7 +201,6 @@ public class ConversationActivity extends AppCompatActivity {
 
             @Override
             public void onMessagingStarted(final MessagingChannel messagingChannel) {
-                // TODO : update read status
                 updateReadStatus(messagingChannel);
                 SendBird.queryMessageList(messagingChannel.getUrl()).load(
                         Long.MAX_VALUE,
@@ -241,7 +238,6 @@ public class ConversationActivity extends AppCompatActivity {
 
             @Override
             public void onMessagingUpdated(MessagingChannel messagingChannel) {
-                // TODO : update read status
                 updateReadStatus(messagingChannel);
             }
 
@@ -418,7 +414,6 @@ public class ConversationActivity extends AppCompatActivity {
         conversationAdapter.clear();
         conversationAdapter.notifyDataSetChanged();
 
-        // TODO : 기존에 있던 채팅방에 들어가는 것인지 확인하고 처리해야 함
         if (getIntent().getBooleanExtra("JOIN", false)) {
             SendBird.joinMessaging(messageChannelURL);
         } else if (getIntent().getBooleanExtra("START", false)) {
