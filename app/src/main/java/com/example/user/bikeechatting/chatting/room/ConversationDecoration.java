@@ -21,12 +21,12 @@ public class ConversationDecoration extends RecyclerView.ItemDecoration {
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         super.getItemOffsets(outRect, view, parent, state);
         int position = parent.getChildLayoutPosition(view);
-        ConversationItem conversationItem = ((ConversationAdapter)parent.getAdapter()).getList().get(position);
+        ConversationItem conversationItem = ((ConversationAdapter)parent.getAdapter()).getItemList().get(position);
 
-        if (conversationItem.isSingle())
+        if (conversationItem.isSingleMessage())
             outRect.bottom = space;
         else {
-            if (conversationItem.getInnerType() == ConversationAdapter.FINAL)
+            if (conversationItem.getMultiMessageType() == ConversationAdapter.FINAL)
                 outRect.bottom = space;
             else
                 outRect.bottom = 0;

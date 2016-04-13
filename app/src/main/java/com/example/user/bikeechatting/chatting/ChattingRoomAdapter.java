@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.user.bikeechatting.R;
+import com.sendbird.android.model.MessagingChannel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,8 @@ public class ChattingRoomAdapter extends RecyclerView.Adapter<ChattingRoomViewHo
         holder.setOnChattingRoomClickListener(new OnChattingRoomClickListener() {
             @Override
             public void onChattingRoomClick(View view) {
-                list.get(position).setNumOfStackedConversation(0);
+                // TODO : erase numOfStackedConversation
+//                list.get(position).setNumOfStackedConversation(0);
                 notifyDataSetChanged();
                 if (onChattingRoomAdapterClickListener != null)
                     onChattingRoomAdapterClickListener.onChattingRoomAdapterClick(view, list.get(position), position);
@@ -52,6 +54,37 @@ public class ChattingRoomAdapter extends RecyclerView.Adapter<ChattingRoomViewHo
     public void add(ChattingRoomItem item) {
         list.add(item);
         notifyDataSetChanged();
+    }
+
+    public void clear() {
+        list.clear();
+    }
+
+    public void replace(MessagingChannel messagingChannel) {
+        // TODO : newItem residue field
+        ChattingRoomItem newItem = null;
+        for(ChattingRoomItem item : list) {
+            if(item.getMessagingChannel().getId() == messagingChannel.getId()) {
+                newItem = new ChattingRoomItem(
+                        messagingChannel,
+                        item.getReservationState(),
+                        item.getBicycleName()
+                );
+
+                list.remove(item);
+                break;
+            }
+        }
+
+        list.add(0, newItem);
+        notifyDataSetChanged();
+    }
+
+    public ChattingRoomItem get(MessagingChannel channel) {
+        for(ChattingRoomItem item : list)
+            if(item.getMessagingChannel().getId() == channel.getId())
+                return item;
+        return null;
     }
 
     public void setOnChattingRoomAdapterClickListener(OnChattingRoomAdapterClickListener onChattingRoomAdapterClickListener) {
